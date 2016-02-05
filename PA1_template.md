@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 Activity=read.csv("activity//activity.csv", header=T)
 
 ## What is mean total number of steps taken per day?
@@ -18,52 +14,107 @@ Totalstep <-aggregate(steps ~date,Activity,sum)
 ##Make a histogram of the total number of steps taken each day
 
 hist(Totalstep$steps,main = "Total Steps per Day",col = "blue", xlab = "No of steps")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-1-1.png)
+
+```r
 ##Calculate and report the mean and median total number of steps taken per day
 
 smean<-mean(Totalstep$steps)
 smedian <-median(Totalstep$steps)
-
-``` 
+```
 The Mean is 
-```{r echo=FALSE}
-smean
+
+```
+## [1] 10766.19
 ```
 
 The Median is 
-```{r echo=FALSE}
-smedian
+
+```
+## [1] 10765
 ```
 
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 Interval<- aggregate(steps ~interval,Activity,mean)
 
 plot(Interval,type="l",col="blue",xlab="Interval",ylab ="No.of Steps",main ="Avg number of steps by Interval")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)
+
+```r
 ## 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 Max_Interval<-Interval[which.max(Interval$steps),1]
-
 ```
 Max Step Interval
-```{r echo=FALSE}
-Max_Interval
+
+```
+## [1] 835
 ```
 ## Imputing missing values
-```{r}
+
+```r
 ##Total number of rows with NAs
 Missing_Value<-is.na(Activity)
 
 Total_na<-sum(Missing_Value)
 ```
 Total number of rows with NAs
-```{r echo=FALSE}
-Total_na
+
 ```
-```{r}
+## [1] 2304
+```
+
+```r
 library(Hmisc)
+```
+
+```
+## Warning: package 'Hmisc' was built under R version 3.2.3
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: survival
+```
+
+```
+## Loading required package: Formula
+```
+
+```
+## Warning: package 'Formula' was built under R version 3.2.3
+```
+
+```
+## Loading required package: ggplot2
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.2.3
+```
+
+```
+## 
+## Attaching package: 'Hmisc'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, round.POSIXt, trunc.POSIXt, units
+```
+
+```r
 ## filling in all of the missing values in the dataset with Mean
 Activity_New<-Activity
 Activity_New$steps<-impute(Activity_New$steps,fun=mean)
@@ -73,7 +124,11 @@ Totalsteps <-aggregate(steps ~date,Activity_New,sum)
 ##Make a histogram of the total number of steps taken each day
 
 hist(Totalsteps$steps,main = "Total Steps per Day",col = "blue", xlab = "No of steps")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)
+
+```r
 ##Calculate and report the mean and median total number of steps taken per day
 
 smean1<-mean(Totalsteps$steps)
@@ -82,30 +137,36 @@ smedian1 <-median(Totalsteps$steps)
 Step_Diff<-sum(Totalsteps$steps)-sum(Totalstep$steps)
 Mean_diff<-smean1-smean
 Median_diff<-smedian1-smedian
-``` 
+```
 The Mean is 
-```{r echo=FALSE}
-smean1
+
+```
+## [1] 10766.19
 ```
 The Median is 
-```{r echo=FALSE}
-smedian1
+
+```
+## [1] 10766.19
 ```
 The Mean Diff is 
-```{r echo=FALSE}
-Mean_diff
+
+```
+## [1] 0
 ```
 The Median Diff is 
-```{r echo=FALSE}
-Median_diff
+
+```
+## [1] 1.188679
 ```
 The Step Diff is 
-```{r echo=FALSE}
-Step_Diff
+
+```
+## [1] 86129.51
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 ##1.Create a new factor variable in the dataset with two levels - "weekday" and "weekend"
 
 Activity_New$WeekDay <- ifelse(weekdays(as.Date(Activity_New$date))==c("Sunday"),"Weekend","weekday") 
@@ -121,4 +182,6 @@ xlab("5-minute interval")+
 ylab("Number of steps")+
 theme_light()
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)
 
